@@ -11,9 +11,9 @@ package ipvx
 
 import "net"
 
-// Is4 returns true if addr represents an IPv4 address.
-func Is4(addr net.Addr) bool {
-	var ip net.IP
+// GetIP returns the IP address from addr.  If addr does not contain an IP address, returns nil.
+// Supports *net.IPAddr, *net.IPNet, *net.TCPAddr, and *net.UDPAddr concrete types.
+func GetIP(addr net.Addr) (ip net.IP) {
 	switch ipaddr := addr.(type) {
 	case *net.IPAddr:
 		ip = ipaddr.IP
@@ -24,5 +24,10 @@ func Is4(addr net.Addr) bool {
 	case *net.UDPAddr:
 		ip = ipaddr.IP
 	}
-	return ip.To4() != nil
+	return
+}
+
+// Is4 returns true if addr represents an IPv4 address.
+func Is4(addr net.Addr) bool {
+	return GetIP(addr).To4() != nil
 }
