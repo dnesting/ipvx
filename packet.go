@@ -55,7 +55,7 @@ func (c *pconn4) SetMulticastHopLimit(hoplim int) error { return c.To4().SetMult
 // NewPacketConn creates an IP protocol-agnostic PacketConn instance from c.
 // If c does not seem to be an IPv4 connection, it is assumed to be IPv6.
 func NewPacketConn(c net.PacketConn) PacketConn {
-	if is4(c) {
+	if Is4(c.LocalAddr()) {
 		return (*pconn4)(ipv4.NewPacketConn(c))
 	}
 	return (*pconn6)(ipv6.NewPacketConn(c))

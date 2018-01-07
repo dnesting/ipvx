@@ -11,15 +11,18 @@ package ipvx
 
 import "net"
 
-type localAddrer interface {
-	LocalAddr() net.Addr
-}
-
-func is4(c localAddrer) bool {
-	if ipaddr, ok := c.LocalAddr().(*net.IPAddr); ok {
-		if ipaddr.IP.To4() != nil {
-			return true
-		}
+// Is4 returns true if addr represents an IPv4 address.
+func Is4(addr net.Addr) bool {
+	var ip net.IP
+	switch ipaddr := addr.(type) {
+	case *net.IPAddr:
+		ip = ipaddr.IP
+	case *net.IPNet:
+		ip = ipaddr.IP
+	case *net.TCPAddr:
+		ip = ipaddr.IP
+	case *net.UDPAddr:
+		ip = ipaddr.IP
 	}
-	return false
+	return ip.To4() != nil
 }

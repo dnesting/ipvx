@@ -34,7 +34,7 @@ func (c *conn4) SetHopLimit(hoplim int) error { return c.To4().SetTTL(hoplim) }
 // NewConn creates an IP protocol-agnostic Conn instance from c.
 // If c does not seem to be an IPv4 connection, it is assumed to be IPv6.
 func NewConn(c net.Conn) Conn {
-	if is4(c) {
+	if Is4(c.LocalAddr()) {
 		return (*conn4)(ipv4.NewConn(c))
 	}
 	return (*conn6)(ipv6.NewConn(c))
